@@ -1,36 +1,68 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
+    <!-- Scripts -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+<body class="font-sans antialiased">
+    <div class="min-h-screen bg-gray-100">
+        @include('layouts.navigation')
+
+        <!-- Page Heading -->
+        @isset($header)
+        <header class="bg-white shadow">
+            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                {{ $header }}
+            </div>
+        </header>
+        @endisset
+
+        @if ($errors->any())
+        <div class="max-w-7xl mx-auto mt-4 px-4" x-data="{ open: true }" x-show="open">
+            <div class="bg-red-100 border border-red-300 text-red-800 px-4 py-3 rounded-lg relative">
+                <button @click="open = false"
+                    class="absolute top-2 right-2 text-red-700 hover:text-red-900 text-xl leading-none">
+                    &times;
+                </button>
+                <strong class="font-semibold">Ops! Encontramos alguns erros:</strong>
+                <ul class="ml-4 mt-2 list-disc">
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
         </div>
-    </body>
+        @endif
+
+        @if (session('success'))
+        <div class="max-w-7xl mx-auto mt-4 px-4" x-data="{ open: true }" x-show="open">
+            <div class="bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded-lg relative">
+                <button @click="open = false"
+                    class="absolute top-2 right-2 text-green-700 hover:text-green-900 text-xl leading-none">
+                    &times;
+                </button>
+                {{ session('success') }}
+            </div>
+        </div>
+        @endif
+
+        <!-- Page Content -->
+        <main>
+            {{ $slot }}
+        </main>
+    </div>
+</body>
+
 </html>

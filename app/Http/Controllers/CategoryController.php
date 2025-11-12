@@ -47,7 +47,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        return view ('categories.edit', compact('category'));
+        return view('categories.edit', compact('category'));
     }
 
     /**
@@ -64,12 +64,13 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        if($category->products()->exists()){
-            return back()->withErrors('error', 'Não foi possivel excluir: existem produtos nessa categoria');
+        if ($category->products()->exists()) {
+            return back()->withErrors([
+                'error' => 'Não foi possível excluir: existem produtos nessa categoria.'
+            ]);
         }
 
         $category->delete();
         return redirect()->route('categories.index')->with('success', 'Categoria excluída');
     }
-
 }
